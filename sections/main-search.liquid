@@ -1,0 +1,44 @@
+{% comment %} Search page. Depends on: snippet 'product-card'. {% endcomment %}
+{% style %}
+  .search-{{ section.id }} { padding: var(--section-space) 0; }
+  .search-{{ section.id }}__title { font-size: var(--f7); margin-bottom: 20px; }
+  .search-{{ section.id }}__form { display: flex; gap: 8px; max-width: 520px; margin-bottom: 32px; }
+  .search-{{ section.id }}__input { flex: 1; padding: 14px 16px; border: 1px solid var(--color-border); border-radius: 10px; font: inherit; }
+  .search-{{ section.id }}__btn { padding: 14px 22px; background: var(--color-brand); color: var(--color-bg); border-radius: 10px; font-weight: 600; }
+  .search-{{ section.id }}__grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(12px, 2vw, 24px); }
+  .search-{{ section.id }}__empty { color: var(--color-muted); padding: 40px 0; }
+  @media (min-width: 800px) { .search-{{ section.id }}__grid { grid-template-columns: repeat(4, 1fr); } }
+{% endstyle %}
+
+<section class='search-{{ section.id }}' data-reveal='up'>
+  <div class='container'>
+    <h1 class='search-{{ section.id }}__title'>{{ 'header.search' | t }}</h1>
+    <form action='{{ routes.search_url }}' method='get' role='search' class='search-{{ section.id }}__form'>
+      <input
+        type='search'
+        name='q'
+        value='{{ search.terms | escape }}'
+        class='search-{{ section.id }}__input'
+        placeholder='{{ 'header.search_placeholder' | t }}'
+        aria-label='{{ 'header.search' | t }}'
+      >
+      <button type='submit' class='search-{{ section.id }}__btn'>{{ 'header.search' | t }}</button>
+    </form>
+
+    {%- if search.performed -%}
+      {%- if search.results.size > 0 -%}
+        <div class='search-{{ section.id }}__grid'>
+          {%- for item in search.results -%}
+            {%- if item.object_type == 'product' -%}{% render 'product-card', product: item %}{%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- else -%}
+        <p class='search-{{ section.id }}__empty'>{{ 'products.facets.no_products' | t }}</p>
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Search", "settings": [] }
+{% endschema %}
