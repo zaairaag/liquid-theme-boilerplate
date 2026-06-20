@@ -1,0 +1,17 @@
+{
+  "current": {
+    "store_name": "My Store",
+    "color_brand": "#1A1A1A",
+    "color_brand_dark": "#000000",
+    "color_accent": "#0A7CFF",
+    "color_text": "#1A1A1A",
+    "color_background": "#FFFFFF",
+    "heading_font": "assistant_n7",
+    "body_font": "assistant_n4"
+  },
+  "presets": {
+    "Default": {
+      "store_name": "My Store"
+    }
+  }
+}

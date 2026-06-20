@@ -1,0 +1,43 @@
+{
+  "general": {
+    "accessibility": {
+      "skip_to_content": "Skip to content",
+      "close": "Close",
+      "menu": "Menu"
+    },
+    "newsletter": {
+      "success": "Thanks for subscribing!"
+    },
+    "pagination": {
+      "previous": "Previous",
+      "next": "Next",
+      "page": "Page {{ page }} of {{ total }}"
+    }
+  },
+  "header": {
+    "menu": "Menu",
+    "search": "Search",
+    "search_placeholder": "What are you looking for?",
+    "cart": "Cart",
+    "account": "Account",
+    "wishlist": "Wishlist",
+    "navigation": "Main navigation"
+  },
+  "cart": {
+    "title": "Cart",
+    "empty": "Your cart is empty",
+    "subtotal": "Subtotal",
+    "checkout": "Checkout",
+    "remove": "Remove"
+  },
+  "products": {
+    "facets": {
+      "no_products": "No products found"
+    },
+    "product": {
+      "add_to_cart": "Add to cart",
+      "sold_out": "Sold out",
+      "from": "From"
+    }
+  }
+}

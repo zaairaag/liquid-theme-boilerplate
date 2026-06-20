@@ -1,0 +1,34 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Liquid Theme Boilerplate",
+    "theme_version": "0.1.0",
+    "theme_author": "Zaíra Gonçalves",
+    "theme_documentation_url": "https://github.com/zaairaag/liquid-theme-boilerplate",
+    "theme_support_url": "https://github.com/zaairaag/liquid-theme-boilerplate/issues"
+  },
+  {
+    "name": "Brand",
+    "settings": [
+      { "type": "image_picker", "id": "logo", "label": "Logo" },
+      { "type": "text", "id": "store_name", "label": "Store name", "default": "My Store" }
+    ]
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      { "type": "color", "id": "color_brand", "label": "Brand (primary)", "default": "#1A1A1A" },
+      { "type": "color", "id": "color_brand_dark", "label": "Brand dark", "default": "#000000" },
+      { "type": "color", "id": "color_accent", "label": "Accent", "default": "#0A7CFF" },
+      { "type": "color", "id": "color_text", "label": "Text", "default": "#1A1A1A" },
+      { "type": "color", "id": "color_background", "label": "Background", "default": "#FFFFFF" }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      { "type": "font_picker", "id": "heading_font", "label": "Headings", "default": "assistant_n7" },
+      { "type": "font_picker", "id": "body_font", "label": "Body", "default": "assistant_n4" }
+    ]
+  }
+]
