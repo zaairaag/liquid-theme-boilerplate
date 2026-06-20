@@ -1,0 +1,62 @@
+{% comment %} Depends on: snippet 'logo'. {% endcomment %}
+{% style %}
+  .footer-{{ section.id }} { background: var(--color-brand-dark); color: var(--color-bg); margin-top: var(--section-space); }
+  .footer-{{ section.id }}__grid { display: grid; grid-template-columns: 1fr; gap: 32px; padding: var(--section-space) 0; }
+  .footer-{{ section.id }}__title { font-size: var(--f1); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px; opacity: 0.7; }
+  .footer-{{ section.id }}__links a { display: block; padding: 4px 0; opacity: 0.9; }
+  .footer-{{ section.id }}__links a:hover { opacity: 1; color: var(--color-accent); }
+  .footer-{{ section.id }}__bottom { border-top: 1px solid rgba(255, 255, 255, 0.15); padding: 20px 0; font-size: var(--f0); opacity: 0.7; }
+  @media (min-width: 700px) { .footer-{{ section.id }}__grid { grid-template-columns: 2fr 1fr 1fr; } }
+{% endstyle %}
+
+<footer class='footer-{{ section.id }}'>
+  <div class='container footer-{{ section.id }}__grid'>
+    <div>
+      {% render 'logo', extra_class: 'logo--footer' %}
+      {%- if section.settings.description != blank -%}
+        <p style='margin-top:12px;opacity:.85;max-width:36ch'>{{ section.settings.description }}</p>
+      {%- endif -%}
+    </div>
+    <div>
+      <h2 class='footer-{{ section.id }}__title'>{{ section.settings.menu_title | default: 'Shop' }}</h2>
+      <nav class='footer-{{ section.id }}__links'>
+        {%- for link in section.settings.menu.links -%}
+          <a href='{{ link.url }}'>{{ link.title }}</a>
+        {%- endfor -%}
+      </nav>
+    </div>
+    <div>
+      <h2 class='footer-{{ section.id }}__title'>Contact</h2>
+      <nav class='footer-{{ section.id }}__links'>
+        {%- if section.settings.email != blank -%}
+          <a href='mailto:{{ section.settings.email }}'>{{ section.settings.email }}</a>
+        {%- endif -%}
+        {%- if section.settings.phone != blank -%}
+          <a href='tel:{{ section.settings.phone }}'>{{ section.settings.phone }}</a>
+        {%- endif -%}
+      </nav>
+    </div>
+  </div>
+  <div class='container footer-{{ section.id }}__bottom'>
+    &copy; {{ 'now' | date: '%Y' }}
+    {{ settings.store_name | default: shop.name }}. All rights reserved.
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Short description",
+      "default": "An online store with great products and service."
+    },
+    { "type": "text", "id": "menu_title", "label": "Menu column title", "default": "Shop" },
+    { "type": "link_list", "id": "menu", "label": "Footer menu", "default": "footer" },
+    { "type": "text", "id": "email", "label": "Email", "default": "hello@mystore.com" },
+    { "type": "text", "id": "phone", "label": "Phone", "default": "+1 (000) 000-0000" }
+  ]
+}
+{% endschema %}
