@@ -1,0 +1,53 @@
+{% comment %} Email capture (customer form). Depends on: none. {% endcomment %}
+{% style %}
+  .newsletter-{{ section.id }} { padding: var(--section-space) 0; }
+  .newsletter-{{ section.id }}__box { background: var(--color-surface); border-radius: 20px; padding: clamp(32px, 6vw, 64px); text-align: center; max-width: 640px; margin: 0 auto; }
+  .newsletter-{{ section.id }}__title { font-size: var(--f5); margin-bottom: 8px; }
+  .newsletter-{{ section.id }}__text { color: var(--color-muted); margin-bottom: 24px; }
+  .newsletter-{{ section.id }}__form { display: flex; gap: 8px; max-width: 420px; margin: 0 auto; }
+  .newsletter-{{ section.id }}__input { flex: 1; padding: 14px 16px; border: 1px solid var(--color-border); border-radius: 10px; background: var(--color-bg); font: inherit; }
+  .newsletter-{{ section.id }}__btn { padding: 14px 22px; background: var(--color-brand); color: var(--color-bg); border-radius: 10px; font-weight: 600; }
+  .newsletter-{{ section.id }}__ok { color: #16a34a; font-weight: 600; }
+{% endstyle %}
+
+<section class='newsletter-{{ section.id }}' data-reveal>
+  <div class='container'>
+    <div class='newsletter-{{ section.id }}__box'>
+      <h2 class='newsletter-{{ section.id }}__title'>{{ section.settings.title }}</h2>
+      {%- if section.settings.text != blank -%}
+        <p class='newsletter-{{ section.id }}__text'>{{ section.settings.text }}</p>
+      {%- endif -%}
+      {%- form 'customer' -%}
+        {%- if form.posted_successfully? -%}
+          <p class='newsletter-{{ section.id }}__ok'>{{ 'general.newsletter.success' | t }}</p>
+        {%- else -%}
+          <input type='hidden' name='contact[tags]' value='newsletter'>
+          <div class='newsletter-{{ section.id }}__form'>
+            <input
+              type='email'
+              name='contact[email]'
+              class='newsletter-{{ section.id }}__input'
+              placeholder='{{ section.settings.placeholder }}'
+              aria-label='Email'
+              required
+            >
+            <button type='submit' class='newsletter-{{ section.id }}__btn'>{{ section.settings.button }}</button>
+          </div>
+        {%- endif -%}
+      {%- endform -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Newsletter",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Title", "default": "Get our updates" },
+    { "type": "text", "id": "text", "label": "Text", "default": "Deals and new arrivals in your inbox." },
+    { "type": "text", "id": "placeholder", "label": "Placeholder", "default": "Your best email" },
+    { "type": "text", "id": "button", "label": "Button", "default": "Subscribe" }
+  ],
+  "presets": [{ "name": "Newsletter" }]
+}
+{% endschema %}
