@@ -1,0 +1,59 @@
+{% comment %} Customer account dashboard. Depends on: snippet 'account-styles'. {% endcomment %}
+{% render 'account-styles' %}
+<section class='account'>
+  <div class='container account__inner account__inner--wide'>
+    <div class='account__row'>
+      <h1 class='account__title' style='margin:0'>Hello, {{ customer.first_name | default: customer.email }}</h1>
+      <a href='{{ routes.account_logout_url }}' class='account__link'>Log out</a>
+    </div>
+
+    <div class='account__grid account__grid--2'>
+      <div>
+        <h2 class='account__subtitle'>Orders</h2>
+        {%- paginate customer.orders by 20 -%}
+          {%- if customer.orders.size > 0 -%}
+            <table class='account__table'>
+              <thead>
+                <tr>
+                  <th>Order</th>
+                  <th>Date</th>
+                  <th>Total</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {%- for order in customer.orders -%}
+                  <tr>
+                    <td>
+                      <a href='{{ order.customer_url }}' class='account__link'>{{ order.name }}</a>
+                    </td>
+                    <td>{{ order.created_at | date: '%b %d, %Y' }}</td>
+                    <td>{{ order.total_price | money }}</td>
+                    <td>{{ order.financial_status_label }}</td>
+                  </tr>
+                {%- endfor -%}
+              </tbody>
+            </table>
+          {%- else -%}
+            <p>You haven't placed any orders yet.</p>
+          {%- endif -%}
+        {%- endpaginate -%}
+      </div>
+      <div>
+        <h2 class='account__subtitle'>Default address</h2>
+        {%- if customer.default_address -%}
+          {{ customer.default_address | format_address }}
+        {%- else -%}
+          <p>No address saved.</p>
+        {%- endif -%}
+        <p class='account__note'>
+          <a href='{{ routes.account_addresses_url }}' class='account__link'>Manage addresses</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Account", "settings": [] }
+{% endschema %}
