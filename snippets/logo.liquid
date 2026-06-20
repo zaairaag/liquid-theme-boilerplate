@@ -1,0 +1,41 @@
+{% comment %}
+  Store logo: image (settings.logo) with a text fallback (store name).
+  @param {string} [extra_class] - extra CSS class
+  Depends on: none.
+{% endcomment %}
+<a
+  href='{{ routes.root_url }}'
+  class='logo {{ extra_class }}'
+  aria-label='{{ settings.store_name | default: shop.name }}'
+>
+  {%- if settings.logo -%}
+    <img
+      src='{{ settings.logo | image_url: width: 300 }}'
+      alt='{{ settings.store_name | default: shop.name | escape }}'
+      width='150'
+      height='50'
+      loading='eager'
+      class='logo__img'
+    >
+  {%- else -%}
+    <span class='logo__text'>{{ settings.store_name | default: shop.name }}</span>
+  {%- endif -%}
+</a>
+
+{% stylesheet %}
+  .logo {
+    display: inline-flex;
+    align-items: center;
+  }
+  .logo__img {
+    width: auto;
+    height: 40px;
+    object-fit: contain;
+  }
+  .logo__text {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: var(--f4);
+    color: var(--color-brand);
+  }
+{% endstylesheet %}
