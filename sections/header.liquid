@@ -1,0 +1,76 @@
+{% comment %} Depends on: snippet 'logo'. Cart uses Theme.cart (snippet 'cart-drawer'). {% endcomment %}
+{% style %}
+  .header-{{ section.id }} { position: sticky; top: 0; z-index: 1000; background: var(--color-bg); border-bottom: 1px solid var(--color-border); }
+  .header-{{ section.id }}__bar { display: flex; align-items: center; justify-content: space-between; gap: 24px; height: 68px; }
+  .header-{{ section.id }}__nav { display: none; gap: 24px; }
+  .header-{{ section.id }}__nav a { font-size: var(--f1); font-weight: 500; }
+  .header-{{ section.id }}__nav a:hover { color: var(--color-accent); }
+  .header-{{ section.id }}__actions { display: flex; align-items: center; gap: 16px; }
+  .header-{{ section.id }}__icon { position: relative; display: inline-flex; }
+  .header-{{ section.id }}__count { position: absolute; top: -8px; right: -8px; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 8px; background: var(--color-accent); color: #fff; font-size: 10px; line-height: 16px; text-align: center; }
+  .header-{{ section.id }}__menu-btn { display: inline-flex; }
+  @media (min-width: 900px) {
+    .header-{{ section.id }}__nav { display: flex; }
+    .header-{{ section.id }}__menu-btn { display: none; }
+  }
+{% endstyle %}
+
+<header class='header-{{ section.id }}' data-header>
+  <div class='container header-{{ section.id }}__bar'>
+    <button
+      class='header-{{ section.id }}__menu-btn'
+      data-menu-toggle
+      aria-label='{{ 'general.accessibility.menu' | t }}'
+    >
+      <svg viewBox='0 0 24 24' width='24' height='24' fill='none' stroke='currentColor' stroke-width='2'>
+        <path d="M3 6h18M3 12h18M3 18h18"/>
+      </svg>
+    </button>
+
+    {% render 'logo' %}
+
+    <nav class='header-{{ section.id }}__nav' aria-label='{{ 'header.navigation' | t }}'>
+      {%- for link in section.settings.menu.links -%}
+        <a
+          href='{{ link.url }}'
+          {% if link.active %}
+            aria-current='page'
+          {% endif %}
+        >
+          {{ link.title }}
+        </a>
+      {%- endfor -%}
+    </nav>
+
+    <div class='header-{{ section.id }}__actions'>
+      <a href='{{ routes.search_url }}' class='header-{{ section.id }}__icon' aria-label='{{ 'header.search' | t }}'>
+        <svg viewBox='0 0 24 24' width='22' height='22' fill='none' stroke='currentColor' stroke-width='2'>
+          <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+        </svg>
+      </a>
+      <a
+        href='{{ routes.search_url }}?type=product'
+        class='header-{{ section.id }}__icon'
+        aria-label='{{ 'header.wishlist' | t }}'
+      >
+        <svg viewBox='0 0 24 24' width='22' height='22' fill='none' stroke='currentColor' stroke-width='2'>
+          <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 1 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"/>
+        </svg>
+        <span class='header-{{ section.id }}__count' data-favorites-count hidden>0</span>
+      </a>
+      <button class='header-{{ section.id }}__icon' data-cart-toggle aria-label='{{ 'header.cart' | t }}'>
+        <svg viewBox='0 0 24 24' width='22' height='22' fill='none' stroke='currentColor' stroke-width='2'>
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>
+        </svg>
+        <span class='header-{{ section.id }}__count' data-cart-count>{{ cart.item_count }}</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [{ "type": "link_list", "id": "menu", "label": "Main menu", "default": "main-menu" }]
+}
+{% endschema %}
