@@ -1,0 +1,8 @@
+{
+  "plugins": ["@shopify/prettier-plugin-liquid"],
+  "singleQuote": true,
+  "printWidth": 120,
+  "proseWrap": "preserve",
+  "htmlWhitespaceSensitivity": "ignore",
+  "trailingComma": "none"
+}

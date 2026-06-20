@@ -1,0 +1,36 @@
+# Process / AI / agents — keep the portfolio about the code, not the workflow
+AGENTS.md
+CLAUDE.md
+GEMINI.md
+.claude/
+.cursor/
+.github/copilot-instructions.md
+docs/superpowers/
+*-agent.md
+
+# Dependencies
+node_modules/
+
+# Secrets — never commit (public repo)
+.env
+.env.*
+*.token
+.shopify/
+
+# Real client product data (the scaffold template stays)
+data/*.xlsx
+!data/template.csv
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.vscode/
+.idea/
+
+# Logs / temp
+*.log
+npm-debug.log*
+*.tmp
+*.bak

@@ -1,0 +1,26 @@
+{
+  "name": "liquid-theme-boilerplate",
+  "version": "0.1.0",
+  "description": "A neutral, performance-first and modular Shopify (Liquid) theme boilerplate",
+  "private": true,
+  "license": "MIT",
+  "author": "Zaíra Gonçalves",
+  "scripts": {
+    "dev": "shopify theme dev",
+    "push": "shopify theme push",
+    "pull": "shopify theme pull",
+    "check": "shopify theme check",
+    "lint": "shopify theme check",
+    "format": "prettier --write \"**/*.liquid\"",
+    "format:check": "prettier --check \"**/*.liquid\""
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@shopify/cli": "^3.93.2",
+    "@shopify/theme-check-node": "^3.0.0",
+    "@shopify/prettier-plugin-liquid": "^1.10.3",
+    "prettier": "^3.8.4"
+  }
+}

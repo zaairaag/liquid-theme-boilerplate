@@ -1,0 +1,5 @@
+node_modules
+.git
+data/
+*.xlsx
+package-lock.json

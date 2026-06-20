@@ -1,0 +1,15 @@
+# Files that should NOT be uploaded to the Shopify theme
+node_modules/
+.git/
+.github/
+docs/
+scripts/
+data/
+*.md
+package.json
+package-lock.json
+.theme-check.yml
+.prettierrc
+.prettierignore
+.editorconfig
+.gitignore
