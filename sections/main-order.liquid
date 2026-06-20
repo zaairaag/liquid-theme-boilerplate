@@ -1,0 +1,40 @@
+{% comment %} Customer order detail. Depends on: snippet 'account-styles'. {% endcomment %}
+{% render 'account-styles' %}
+<section class='account'>
+  <div class='container account__inner account__inner--wide'>
+    <h1 class='account__title'>{{ order.name }}</h1>
+    <p>
+      {{ order.created_at | date: '%B %d, %Y' }} &middot; {{ order.financial_status_label }} &middot;
+      {{ order.fulfillment_status_label }}
+    </p>
+
+    <table class='account__table' style='margin-top:24px'>
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Qty</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        {%- for line in order.line_items -%}
+          <tr>
+            <td>{{ line.title }}</td>
+            <td>{{ line.quantity }}</td>
+            <td>{{ line.final_line_price | money }}</td>
+          </tr>
+        {%- endfor -%}
+      </tbody>
+    </table>
+
+    <div class='account__row' style='justify-content:flex-end;margin-top:16px'>
+      <strong>Total: {{ order.total_price | money }}</strong>
+    </div>
+
+    <p class='account__note'><a href='{{ routes.account_url }}' class='account__link'>Back to account</a></p>
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Order", "settings": [] }
+{% endschema %}
