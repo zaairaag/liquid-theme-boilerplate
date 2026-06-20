@@ -58,5 +58,7 @@ Shared styles in `snippets/account-styles.liquid`.
 | `main-reset-password` | `customers/reset_password.json` |
 | `main-activate-account` | `customers/activate_account.json` |
 
-## Roadmap
-- Scripts: CSV/spreadsheet product import scaffold
+## Scripts
+| Script | What it does |
+|--------|--------------|
+| `scripts/import-products.mjs` (`npm run import`) | Reads a CSV (`data/template.csv` model), validates rows and writes `data/products.normalized.json`. Plug your Admin API to create products. |
