@@ -1,0 +1,54 @@
+{% comment %} Contact page (native contact form). Depends on: none. {% endcomment %}
+{% style %}
+  .contact-{{ section.id }} { padding: var(--section-space) 0; }
+  .contact-{{ section.id }}__inner { max-width: 640px; margin: 0 auto; }
+  .contact-{{ section.id }}__title { font-size: var(--f7); margin-bottom: 16px; }
+  .contact-{{ section.id }}__intro { color: var(--color-muted); margin-bottom: 28px; }
+  .contact-{{ section.id }}__field { margin-bottom: 16px; }
+  .contact-{{ section.id }}__field label { display: block; font-weight: 600; font-size: var(--f1); margin-bottom: 6px; }
+  .contact-{{ section.id }}__field input, .contact-{{ section.id }}__field textarea { width: 100%; padding: 12px 14px; border: 1px solid var(--color-border); border-radius: 10px; font: inherit; }
+  .contact-{{ section.id }}__btn { padding: 14px 28px; background: var(--color-brand); color: var(--color-bg); border-radius: 10px; font-weight: 600; }
+  .contact-{{ section.id }}__ok { color: #16a34a; font-weight: 600; margin-bottom: 16px; }
+{% endstyle %}
+
+<section class='contact-{{ section.id }}' data-reveal='up'>
+  <div class='container contact-{{ section.id }}__inner'>
+    <h1 class='contact-{{ section.id }}__title'>{{ page.title | default: 'Contact' }}</h1>
+    {%- if page.content != blank -%}
+      <div class='contact-{{ section.id }}__intro rte'>{{ page.content }}</div>
+    {%- endif -%}
+
+    {%- form 'contact' -%}
+      {%- if form.posted_successfully? -%}
+        <p class='contact-{{ section.id }}__ok'>Thanks! We'll get back to you soon.</p>
+      {%- endif -%}
+      <div class='contact-{{ section.id }}__field'>
+        <label for='contact-name'>Name</label>
+        <input type='text' id='contact-name' name='contact[name]' value='{% if form.name %}{{ form.name }}{% endif %}'>
+      </div>
+      <div class='contact-{{ section.id }}__field'>
+        <label for='contact-email'>Email</label>
+        <input
+          type='email'
+          id='contact-email'
+          name='contact[email]'
+          value='{% if form.email %}{{ form.email }}{% endif %}'
+          required
+        >
+      </div>
+      <div class='contact-{{ section.id }}__field'>
+        <label for='contact-body'>Message</label>
+        <textarea
+          id='contact-body'
+          name='contact[body]'
+          rows='5'
+        >{% if form.body %}{{ form.body }}{% endif %}</textarea>
+      </div>
+      <button type='submit' class='contact-{{ section.id }}__btn'>Send</button>
+    {%- endform -%}
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Contact", "settings": [] }
+{% endschema %}
