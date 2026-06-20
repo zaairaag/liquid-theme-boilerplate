@@ -1,0 +1,64 @@
+{% comment %}
+  Wishlist backed by localStorage. API: Theme.favorites.toggle(id, handle), .has(id), .ids(), .count()
+  Fires the 'favorites:updated' event and updates [data-favorites-count].
+  Depends on: none.
+{% endcomment %}
+{% javascript %}
+  window.Theme = window.Theme || {};
+  window.Theme.favorites = {
+    key: 'theme_favorites',
+    get: function () {
+      try {
+        var raw = JSON.parse(localStorage.getItem(this.key) || '[]');
+        return Array.isArray(raw) ? raw : [];
+      } catch (e) {
+        return [];
+      }
+    },
+    ids: function () {
+      return this.get().map(function (it) {
+        return it.id;
+      });
+    },
+    has: function (id) {
+      return this.ids().indexOf(parseInt(id, 10)) !== -1;
+    },
+    count: function () {
+      return this.get().length;
+    },
+    save: function (items) {
+      localStorage.setItem(this.key, JSON.stringify(items));
+      this.refresh();
+      document.dispatchEvent(new CustomEvent('favorites:updated', { detail: { items: items } }));
+    },
+    add: function (id, handle) {
+      id = parseInt(id, 10);
+      if (!this.has(id)) {
+        var items = this.get();
+        items.push({ id: id, handle: handle || null });
+        this.save(items);
+      }
+    },
+    remove: function (id) {
+      id = parseInt(id, 10);
+      this.save(
+        this.get().filter(function (it) {
+          return it.id !== id;
+        })
+      );
+    },
+    toggle: function (id, handle) {
+      this.has(id) ? this.remove(id) : this.add(id, handle);
+    },
+    refresh: function () {
+      var n = this.count();
+      document.querySelectorAll('[data-favorites-count]').forEach(function (el) {
+        el.textContent = n;
+        el.hidden = n === 0;
+      });
+    }
+  };
+  document.addEventListener('DOMContentLoaded', function () {
+    window.Theme.favorites.refresh();
+  });
+{% endjavascript %}
