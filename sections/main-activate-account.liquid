@@ -1,0 +1,35 @@
+{% comment %} Activate account. Depends on: snippet 'account-styles'. {% endcomment %}
+{% render 'account-styles' %}
+<section class='account'>
+  <div class='container account__inner'>
+    <h1 class='account__title'>Activate account</h1>
+    <p class='account__note'>Create your password to activate your account.</p>
+    {%- form 'activate_customer_password' -%}
+      {%- if form.errors -%}
+        <div class='account__errors'>{{ form.errors | default_errors }}</div>
+      {%- endif -%}
+      <div class='account__field' style='margin-top:16px'>
+        <label for='activate-password'>Password</label>
+        <input type='password' id='activate-password' name='customer[password]' autocomplete='new-password' required>
+      </div>
+      <div class='account__field'>
+        <label for='activate-confirm'>Confirm password</label>
+        <input
+          type='password'
+          id='activate-confirm'
+          name='customer[password_confirmation]'
+          autocomplete='new-password'
+          required
+        >
+      </div>
+      <button type='submit' name='commit' class='account__btn'>Activate account</button>
+      <button type='submit' name='decline' class='account__link' style='background:none;border:0;margin-left:12px'>
+        Decline invitation
+      </button>
+    {%- endform -%}
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Activate account", "settings": [] }
+{% endschema %}
