@@ -1,0 +1,67 @@
+{% comment %} Cart page. Depends on: none (native cart form). {% endcomment %}
+{% style %}
+  .cart-{{ section.id }} { padding: var(--section-space) 0; }
+  .cart-{{ section.id }}__title { font-size: var(--f7); margin-bottom: 24px; }
+  .cart-{{ section.id }}__empty { padding: 60px 0; text-align: center; color: var(--color-muted); }
+  .cart-{{ section.id }}__row { display: grid; grid-template-columns: 72px 1fr auto; gap: 16px; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--color-border); }
+  .cart-{{ section.id }}__row img { width: 72px; height: 72px; object-fit: cover; border-radius: 8px; }
+  .cart-{{ section.id }}__qty { display: inline-flex; border: 1px solid var(--color-border); border-radius: 8px; overflow: hidden; }
+  .cart-{{ section.id }}__qty input { width: 48px; text-align: center; border: 0; font: inherit; }
+  .cart-{{ section.id }}__qty a { width: 34px; line-height: 38px; text-align: center; }
+  .cart-{{ section.id }}__foot { display: flex; flex-direction: column; align-items: end; gap: 16px; margin-top: 24px; }
+  .cart-{{ section.id }}__subtotal { font-size: var(--f4); font-weight: 700; }
+  .cart-{{ section.id }}__checkout { padding: 14px 32px; background: var(--color-brand); color: var(--color-bg); border-radius: 10px; font-weight: 600; }
+{% endstyle %}
+
+<section class='cart-{{ section.id }}'>
+  <div class='container'>
+    <h1 class='cart-{{ section.id }}__title'>{{ 'cart.title' | t }}</h1>
+
+    {%- if cart.item_count > 0 -%}
+      <form action='{{ routes.cart_url }}' method='post'>
+        {%- for item in cart.items -%}
+          <div class='cart-{{ section.id }}__row'>
+            {%- if item.image -%}
+              <img
+                src='{{ item.image | image_url: width: 144 }}'
+                alt='{{ item.title | escape }}'
+                width='72'
+                height='72'
+              >
+            {%- else -%}
+              <span></span>
+            {%- endif -%}
+            <div>
+              <a href='{{ item.url }}'>
+                <strong>{{ item.product.title }}</strong>
+              </a>
+              {%- unless item.product.has_only_default_variant -%}
+                <div style='color:var(--color-muted);font-size:var(--f1)'>{{ item.variant.title }}</div>
+              {%- endunless -%}
+              <div class='cart-{{ section.id }}__qty'>
+                <a href='{{ item.url_to_remove }}' aria-label='{{ 'cart.remove' | t }}'>&minus;</a>
+                <input type='number' name='updates[]' value='{{ item.quantity }}' min='0' aria-label='Quantity'>
+                <a href='{{ item.url }}' aria-label='View'>+</a>
+              </div>
+            </div>
+            <div>{{ item.final_line_price | money }}</div>
+          </div>
+        {%- endfor -%}
+
+        <div class='cart-{{ section.id }}__foot'>
+          <button type='submit' name='update'>Update</button>
+          <div class='cart-{{ section.id }}__subtotal'>{{ 'cart.subtotal' | t }}: {{ cart.total_price | money }}</div>
+          <button type='submit' name='checkout' class='cart-{{ section.id }}__checkout'>
+            {{ 'cart.checkout' | t }}
+          </button>
+        </div>
+      </form>
+    {%- else -%}
+      <p class='cart-{{ section.id }}__empty'>{{ 'cart.empty' | t }}</p>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Cart", "settings": [] }
+{% endschema %}
