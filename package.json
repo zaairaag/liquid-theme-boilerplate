@@ -12,7 +12,8 @@
     "check": "shopify theme check",
     "lint": "shopify theme check",
     "format": "prettier --write \"**/*.liquid\"",
-    "format:check": "prettier --check \"**/*.liquid\""
+    "format:check": "prettier --check \"**/*.liquid\"",
+    "import": "node scripts/import-products.mjs"
   },
   "engines": {
     "node": ">=18.0.0"

@@ -17,8 +17,8 @@ node_modules/
 *.token
 .shopify/
 
-# Real client product data (the scaffold template stays)
-data/*.xlsx
+# Real client product data and generated output (the scaffold template stays)
+data/*
 !data/template.csv
 
 # OS / editor
