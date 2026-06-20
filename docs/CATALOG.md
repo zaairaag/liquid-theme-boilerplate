@@ -34,7 +34,29 @@ Index of available sections and snippets. Each piece is self-contained and remov
 ## Effect convention
 `data-reveal` (fade) on central/reading blocks · `data-reveal="up"` (fade + rise) on content blocks.
 
+## E-commerce
+| Section | Template | What it does |
+|---------|----------|--------------|
+| `main-product` | `product.json` | Product page: gallery, variant selector, qty, add to cart, favorite, JSON-LD |
+| `main-collection` | `collection.json` | Collection grid with sort + pagination |
+| `main-cart` | `cart.json` | Cart page (native cart form) |
+| `main-search` | `search.json` | Search form + product results |
+| `main-list-collections` | `list-collections.json` | All collections grid |
+| `main-page` | `page.json` | Generic page (title + rich text) |
+| `contact` | `page.contact.json` | Contact page with native form |
+| `main-404` | `404.json` | Not-found page |
+
+## Account
+Shared styles in `snippets/account-styles.liquid`.
+| Section | Template |
+|---------|----------|
+| `main-login` | `customers/login.json` |
+| `main-register` | `customers/register.json` |
+| `main-account` | `customers/account.json` |
+| `main-order` | `customers/order.json` |
+| `main-addresses` | `customers/addresses.json` |
+| `main-reset-password` | `customers/reset_password.json` |
+| `main-activate-account` | `customers/activate_account.json` |
+
 ## Roadmap
-- E-commerce: `product`, `collection` (with facets), `search`, `cart`, `list-collections`
-- Account: login, register, account, order, addresses, password
 - Scripts: CSV/spreadsheet product import scaffold
