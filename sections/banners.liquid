@@ -1,0 +1,60 @@
+{% comment %} Promo banners (image + text + CTA). Blocks. Depends on: none. {% endcomment %}
+{% style %}
+  .banners-{{ section.id }} { padding: var(--section-space) 0; }
+  .banners-{{ section.id }}__grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+  .banners-{{ section.id }}__item { position: relative; min-height: 240px; display: flex; align-items: end; padding: 28px; border-radius: 16px; overflow: hidden; color: #fff; isolation: isolate; }
+  .banners-{{ section.id }}__bg { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; }
+  .banners-{{ section.id }}__item::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(0deg, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.05)); }
+  .banners-{{ section.id }}__eyebrow { font-size: var(--f0); text-transform: uppercase; letter-spacing: 0.06em; opacity: 0.9; }
+  .banners-{{ section.id }}__title { font-size: var(--f5); margin: 4px 0 14px; }
+  .banners-{{ section.id }}__cta { display: inline-block; padding: 10px 18px; background: #fff; color: var(--color-text); border-radius: 8px; font-weight: 600; font-size: var(--f1); }
+  @media (min-width: 700px) { .banners-{{ section.id }}__grid { grid-template-columns: repeat(2, 1fr); } }
+{% endstyle %}
+
+<section class='banners-{{ section.id }}' data-reveal='up'>
+  {%- capture bg_class -%}banners-{{ section.id }}__bg{%- endcapture -%}
+  <div class='container banners-{{ section.id }}__grid'>
+    {%- for block in section.blocks -%}
+      <article class='banners-{{ section.id }}__item' {{ block.shopify_attributes }}>
+        {%- if block.settings.image -%}
+          {{
+            block.settings.image
+            | image_url: width: 800
+            | image_tag: loading: 'lazy', class: bg_class, widths: '400, 800', alt: block.settings.title
+          }}
+        {%- endif -%}
+        <div>
+          {%- if block.settings.eyebrow != blank -%}
+            <p class='banners-{{ section.id }}__eyebrow'>{{ block.settings.eyebrow }}</p>
+          {%- endif -%}
+          <h3 class='banners-{{ section.id }}__title'>{{ block.settings.title }}</h3>
+          {%- if block.settings.cta != blank -%}
+            <a href='{{ block.settings.link | default: '#' }}' class='banners-{{ section.id }}__cta'>
+              {{ block.settings.cta }}
+            </a>
+          {%- endif -%}
+        </div>
+      </article>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Banners",
+  "blocks": [
+    {
+      "type": "banner",
+      "name": "Banner",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Background image" },
+        { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Featured" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Your campaign here" },
+        { "type": "text", "id": "cta", "label": "Button label", "default": "Learn more" },
+        { "type": "url", "id": "link", "label": "Link" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Banners", "blocks": [{ "type": "banner" }, { "type": "banner" }] }]
+}
+{% endschema %}
