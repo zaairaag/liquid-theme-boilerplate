@@ -1,0 +1,213 @@
+{% comment %}
+  Cart drawer. API: Theme.cart.open(), .close(), .refresh(), .add(variantId, qty)
+  Uses the Cart AJAX API. Liquid-dependent values are passed via data-* (the {% javascript %} tag is static).
+  Depends on: snippet 'alert' (optional feedback).
+{% endcomment %}
+<div
+  class='cart-drawer'
+  data-cart-drawer
+  data-cart-url='{{ routes.cart_url }}'
+  data-cart-add-url='{{ routes.cart_add_url }}'
+  data-currency='{{ cart.currency.iso_code }}'
+  data-empty-text='{{ 'cart.empty' | t | escape }}'
+  aria-hidden='true'
+>
+  <div class='cart-drawer__backdrop' data-cart-close></div>
+  <aside class='cart-drawer__panel' role='dialog' aria-modal='true' aria-label='{{ 'cart.title' | t }}'>
+    <header class='cart-drawer__top'>
+      <h2>{{ 'cart.title' | t }}</h2>
+      <button data-cart-close aria-label='{{ 'general.accessibility.close' | t }}'>&times;</button>
+    </header>
+    <div class='cart-drawer__items' data-cart-items>
+      <p class='cart-drawer__empty'>{{ 'cart.empty' | t }}</p>
+    </div>
+    <footer class='cart-drawer__footer' data-cart-footer hidden>
+      <div class='cart-drawer__subtotal'>
+        <span>{{ 'cart.subtotal' | t }}</span>
+        <span data-cart-subtotal></span>
+      </div>
+      <a href='{{ routes.cart_url }}/checkout' class='cart-drawer__checkout'>{{ 'cart.checkout' | t }}</a>
+    </footer>
+  </aside>
+</div>
+
+{% stylesheet %}
+  .cart-drawer {
+    position: fixed;
+    inset: 0;
+    z-index: 10001;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 0.3s ease,
+      visibility 0.3s ease;
+  }
+  .cart-drawer.is-open {
+    opacity: 1;
+    visibility: visible;
+  }
+  .cart-drawer__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+  }
+  .cart-drawer__panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 420px;
+    max-width: 90vw;
+    background: var(--color-bg);
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .cart-drawer.is-open .cart-drawer__panel {
+    transform: translateX(0);
+  }
+  .cart-drawer__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .cart-drawer__top button {
+    font-size: 28px;
+    line-height: 1;
+  }
+  .cart-drawer__items {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+  }
+  .cart-drawer__empty {
+    color: var(--color-muted);
+    text-align: center;
+    padding: 40px 0;
+  }
+  .cart-drawer__footer {
+    padding: 20px;
+    border-top: 1px solid var(--color-border);
+  }
+  .cart-drawer__subtotal {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  .cart-drawer__checkout {
+    display: block;
+    text-align: center;
+    padding: 14px;
+    background: var(--color-brand);
+    color: var(--color-bg);
+    border-radius: 10px;
+    font-weight: 600;
+  }
+  .cart-drawer__item {
+    display: flex;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .cart-drawer__item img {
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  window.Theme = window.Theme || {};
+  (function () {
+    var drawer = document.querySelector('[data-cart-drawer]');
+    if (!drawer) return;
+    var cfg = drawer.dataset;
+    var items = drawer.querySelector('[data-cart-items]');
+    var footer = drawer.querySelector('[data-cart-footer]');
+    var subtotalEl = drawer.querySelector('[data-cart-subtotal]');
+
+    function money(cents) {
+      try {
+        return (cents / 100).toLocaleString(undefined, { style: 'currency', currency: cfg.currency });
+      } catch (e) {
+        return (cents / 100).toFixed(2);
+      }
+    }
+
+    function render(cart) {
+      if (!cart.items || !cart.items.length) {
+        items.innerHTML = '<p class="cart-drawer__empty"></p>';
+        items.querySelector('.cart-drawer__empty').textContent = cfg.emptyText;
+        footer.hidden = true;
+        return;
+      }
+      items.innerHTML = cart.items
+        .map(function (it) {
+          var img = it.image ? '<img src="' + it.image + '" alt="" width="64" height="64">' : '';
+          var line = document.createElement('div');
+          line.innerHTML = '<strong></strong><br><span></span>';
+          line.querySelector('strong').textContent = it.product_title;
+          line.querySelector('span').textContent = it.quantity + ' x ' + money(it.final_price);
+          return '<div class="cart-drawer__item">' + img + '<div>' + line.innerHTML + '</div></div>';
+        })
+        .join('');
+      subtotalEl.textContent = money(cart.total_price);
+      footer.hidden = false;
+    }
+
+    var api = {
+      open: function () {
+        drawer.classList.add('is-open');
+        drawer.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('is-locked');
+        api.refresh();
+      },
+      close: function () {
+        drawer.classList.remove('is-open');
+        drawer.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('is-locked');
+      },
+      refresh: function () {
+        return fetch(cfg.cartUrl + '.js')
+          .then(function (r) {
+            return r.json();
+          })
+          .then(render);
+      },
+      add: function (variantId, qty) {
+        return fetch(cfg.cartAddUrl + '.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: variantId, quantity: qty || 1 })
+        })
+          .then(function (r) {
+            return r.json();
+          })
+          .then(function () {
+            api.refresh();
+            api.open();
+          });
+      }
+    };
+    window.Theme.cart = api;
+
+    drawer.querySelectorAll('[data-cart-close]').forEach(function (b) {
+      b.addEventListener('click', api.close);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') api.close();
+    });
+    document.addEventListener('click', function (e) {
+      var toggle = e.target.closest('[data-cart-toggle]');
+      if (toggle) {
+        e.preventDefault();
+        api.open();
+      }
+    });
+  })();
+{% endjavascript %}
