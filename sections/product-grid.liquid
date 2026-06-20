@@ -1,0 +1,52 @@
+{% comment %} Product grid from a collection. Depends on: snippet 'product-card'. {% endcomment %}
+{% style %}
+  .product-grid-{{ section.id }} { padding: var(--section-space) 0; }
+  .product-grid-{{ section.id }}__head { display: flex; align-items: end; justify-content: space-between; gap: 16px; margin-bottom: 28px; }
+  .product-grid-{{ section.id }}__title { font-size: var(--f6); }
+  .product-grid-{{ section.id }}__view { font-weight: 600; color: var(--color-accent); white-space: nowrap; }
+  .product-grid-{{ section.id }}__grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(12px, 2vw, 24px); }
+  @media (min-width: 700px) { .product-grid-{{ section.id }}__grid { grid-template-columns: repeat(4, 1fr); } }
+{% endstyle %}
+
+<section class='product-grid-{{ section.id }}' data-reveal='up'>
+  <div class='container'>
+    <div class='product-grid-{{ section.id }}__head'>
+      <h2 class='product-grid-{{ section.id }}__title'>{{ section.settings.title }}</h2>
+      {%- if section.settings.collection != blank -%}
+        <a href='{{ section.settings.collection.url }}' class='product-grid-{{ section.id }}__view'>
+          {{ section.settings.view_label }}
+        </a>
+      {%- endif -%}
+    </div>
+    <div class='product-grid-{{ section.id }}__grid'>
+      {%- if section.settings.collection.products.size > 0 -%}
+        {%- for product in section.settings.collection.products limit: section.settings.limit -%}
+          {% render 'product-card', product: product %}
+        {%- endfor -%}
+      {%- else -%}
+        {%- for i in (1..section.settings.limit) -%}
+          <article class='product-card'>
+            <div class='product-card__media'>{{ 'product-1' | placeholder_svg_tag: 'product-card__img' }}</div>
+            <h3 class='product-card__title'>Sample product</h3>
+            <div class='product-card__price'>
+              <span class='product-card__price-now'>{{ 1990 | money }}</span>
+            </div>
+          </article>
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Product grid",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Title", "default": "Best sellers" },
+    { "type": "collection", "id": "collection", "label": "Collection" },
+    { "type": "range", "id": "limit", "label": "Number of products", "min": 2, "max": 12, "step": 1, "default": 4 },
+    { "type": "text", "id": "view_label", "label": "Link label", "default": "View all" }
+  ],
+  "presets": [{ "name": "Product grid" }]
+}
+{% endschema %}
