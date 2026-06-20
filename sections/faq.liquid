@@ -1,0 +1,49 @@
+{% comment %} FAQ accordion (native details/summary). Blocks. Depends on: none. {% endcomment %}
+{% style %}
+  .faq-{{ section.id }} { padding: var(--section-space) 0; }
+  .faq-{{ section.id }}__title { font-size: var(--f6); text-align: center; margin-bottom: 32px; }
+  .faq-{{ section.id }}__list { max-width: 720px; margin: 0 auto; }
+  .faq-{{ section.id }}__item { border-bottom: 1px solid var(--color-border); }
+  .faq-{{ section.id }}__q { display: flex; justify-content: space-between; gap: 16px; padding: 18px 0; font-weight: 600; font-size: var(--f3); cursor: pointer; list-style: none; }
+  .faq-{{ section.id }}__q::-webkit-details-marker { display: none; }
+  .faq-{{ section.id }}__item[open] .faq-{{ section.id }}__q .faq-{{ section.id }}__plus { transform: rotate(45deg); }
+  .faq-{{ section.id }}__plus { transition: transform 0.2s ease; flex-shrink: 0; }
+  .faq-{{ section.id }}__a { padding: 0 0 18px; color: var(--color-muted); font-size: var(--f2); }
+{% endstyle %}
+
+<section class='faq-{{ section.id }}' data-reveal='up'>
+  <div class='container'>
+    {%- if section.settings.title != blank -%}
+      <h2 class='faq-{{ section.id }}__title'>{{ section.settings.title }}</h2>
+    {%- endif -%}
+    <div class='faq-{{ section.id }}__list'>
+      {%- for block in section.blocks -%}
+        <details class='faq-{{ section.id }}__item' {{ block.shopify_attributes }}>
+          <summary class='faq-{{ section.id }}__q'>
+            {{ block.settings.question }}
+            <span class='faq-{{ section.id }}__plus'>+</span>
+          </summary>
+          <div class='faq-{{ section.id }}__a'>{{ block.settings.answer }}</div>
+        </details>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "FAQ",
+  "settings": [{ "type": "text", "id": "title", "label": "Title", "default": "Frequently asked questions" }],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Question",
+      "settings": [
+        { "type": "text", "id": "question", "label": "Question", "default": "What is the delivery time?" },
+        { "type": "richtext", "id": "answer", "label": "Answer", "default": "<p>Write the answer here.</p>" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "FAQ", "blocks": [{ "type": "item" }, { "type": "item" }, { "type": "item" }] }]
+}
+{% endschema %}
