@@ -1,0 +1,88 @@
+{% comment %} Shared styles for customer account pages. Rendered once per account page. {% endcomment %}
+{% stylesheet %}
+  .account {
+    padding: var(--section-space) 0;
+  }
+  .account__inner {
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  .account__inner--wide {
+    max-width: 900px;
+  }
+  .account__title {
+    font-size: var(--f7);
+    margin-bottom: 24px;
+  }
+  .account__subtitle {
+    font-size: var(--f4);
+    margin-bottom: 12px;
+  }
+  .account__field {
+    margin-bottom: 16px;
+  }
+  .account__field label {
+    display: block;
+    font-weight: 600;
+    font-size: var(--f1);
+    margin-bottom: 6px;
+  }
+  .account__field input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    font: inherit;
+  }
+  .account__btn {
+    padding: 14px 28px;
+    background: var(--color-brand);
+    color: var(--color-bg);
+    border-radius: 10px;
+    font-weight: 600;
+  }
+  .account__link {
+    color: var(--color-accent);
+    font-weight: 600;
+  }
+  .account__errors {
+    color: #dc2626;
+    margin-bottom: 16px;
+  }
+  .account__note {
+    margin-top: 20px;
+  }
+  .account__table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .account__table th,
+  .account__table td {
+    padding: 10px;
+    border-bottom: 1px solid var(--color-border);
+    text-align: left;
+  }
+  .account__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .account__card {
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    padding: 16px;
+    margin: 16px 0;
+  }
+  .account__grid {
+    display: grid;
+    gap: 32px;
+  }
+  @media (min-width: 800px) {
+    .account__grid--2 {
+      grid-template-columns: 2fr 1fr;
+    }
+  }
+{% endstylesheet %}
