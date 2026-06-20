@@ -1,0 +1,55 @@
+{
+  "sections": {
+    "hero": { "type": "hero" },
+    "trust": {
+      "type": "trust-badges",
+      "blocks": {
+        "t1": { "type": "badge" },
+        "t2": { "type": "badge" },
+        "t3": { "type": "badge" },
+        "t4": { "type": "badge" }
+      },
+      "block_order": ["t1", "t2", "t3", "t4"]
+    },
+    "collections": {
+      "type": "collection-list",
+      "blocks": {
+        "c1": { "type": "collection" },
+        "c2": { "type": "collection" },
+        "c3": { "type": "collection" },
+        "c4": { "type": "collection" }
+      },
+      "block_order": ["c1", "c2", "c3", "c4"]
+    },
+    "products": { "type": "product-grid" },
+    "services": {
+      "type": "services",
+      "blocks": {
+        "s1": { "type": "service" },
+        "s2": { "type": "service" },
+        "s3": { "type": "service" }
+      },
+      "block_order": ["s1", "s2", "s3"]
+    },
+    "banners": {
+      "type": "banners",
+      "blocks": {
+        "b1": { "type": "banner" },
+        "b2": { "type": "banner" }
+      },
+      "block_order": ["b1", "b2"]
+    },
+    "about": { "type": "about" },
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "q1": { "type": "item" },
+        "q2": { "type": "item" },
+        "q3": { "type": "item" }
+      },
+      "block_order": ["q1", "q2", "q3"]
+    },
+    "newsletter": { "type": "newsletter" }
+  },
+  "order": ["hero", "trust", "collections", "products", "services", "banners", "about", "faq", "newsletter"]
+}
