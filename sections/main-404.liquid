@@ -1,0 +1,25 @@
+{% comment %} 404 page. Depends on: none. {% endcomment %}
+{% style %}
+  .notfound-{{ section.id }} { padding: clamp(60px, 12vw, 140px) 0; text-align: center; }
+  .notfound-{{ section.id }}__code { font-size: var(--f8); font-weight: 800; color: var(--color-brand); }
+  .notfound-{{ section.id }}__text { font-size: var(--f3); color: var(--color-muted); margin: 8px 0 28px; }
+  .notfound-{{ section.id }}__btn { display: inline-block; padding: 14px 28px; background: var(--color-brand); color: var(--color-bg); border-radius: 10px; font-weight: 600; }
+{% endstyle %}
+
+<section class='notfound-{{ section.id }}' data-reveal>
+  <div class='container'>
+    <p class='notfound-{{ section.id }}__code'>404</p>
+    <p class='notfound-{{ section.id }}__text'>{{ section.settings.text }}</p>
+    <a href='{{ routes.root_url }}' class='notfound-{{ section.id }}__btn'>{{ section.settings.button_label }}</a>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "404",
+  "settings": [
+    { "type": "text", "id": "text", "label": "Text", "default": "The page you're looking for doesn't exist." },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Back to home" }
+  ]
+}
+{% endschema %}
