@@ -1,0 +1,102 @@
+{% comment %} Collection page: facets, sort, pagination, grid. Depends on: snippet 'product-card'. {% endcomment %}
+{% style %}
+  .collection-{{ section.id }} { padding: var(--section-space) 0; }
+  .collection-{{ section.id }}__head { margin-bottom: 24px; }
+  .collection-{{ section.id }}__title { font-size: var(--f7); }
+  .collection-{{ section.id }}__bar { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+  .collection-{{ section.id }}__sort select { padding: 10px 12px; border: 1px solid var(--color-border); border-radius: 10px; font: inherit; }
+  .collection-{{ section.id }}__grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(12px, 2vw, 24px); }
+  .collection-{{ section.id }}__empty { padding: 60px 0; text-align: center; color: var(--color-muted); }
+  .collection-{{ section.id }}__pagination { display: flex; gap: 8px; justify-content: center; margin-top: 40px; }
+  .collection-{{ section.id }}__pagination a, .collection-{{ section.id }}__pagination span { padding: 8px 14px; border: 1px solid var(--color-border); border-radius: 8px; }
+  .collection-{{ section.id }}__pagination .is-current { background: var(--color-brand); color: var(--color-bg); border-color: var(--color-brand); }
+  @media (min-width: 800px) { .collection-{{ section.id }}__grid { grid-template-columns: repeat(4, 1fr); } }
+{% endstyle %}
+
+<section class='collection-{{ section.id }}' data-reveal='up'>
+  <div class='container'>
+    <div class='collection-{{ section.id }}__head'>
+      <h1 class='collection-{{ section.id }}__title'>{{ collection.title }}</h1>
+    </div>
+
+    {%- paginate collection.products by 16 -%}
+      <div class='collection-{{ section.id }}__bar'>
+        <span>{{ collection.products_count }} products</span>
+        <form method='get' class='collection-{{ section.id }}__sort'>
+          <label>
+            <span class='visually-hidden'>Sort</span>
+            <select name='sort_by' onchange='this.form.submit()'>
+              {%- assign sort = collection.sort_by | default: collection.default_sort_by -%}
+              <option
+                value='manual'
+                {% if sort == 'manual' %}
+                  selected
+                {% endif %}
+              >
+                Featured
+              </option>
+              <option
+                value='price-ascending'
+                {% if sort == 'price-ascending' %}
+                  selected
+                {% endif %}
+              >
+                Price: low to high
+              </option>
+              <option
+                value='price-descending'
+                {% if sort == 'price-descending' %}
+                  selected
+                {% endif %}
+              >
+                Price: high to low
+              </option>
+              <option
+                value='created-descending'
+                {% if sort == 'created-descending' %}
+                  selected
+                {% endif %}
+              >
+                Newest
+              </option>
+              <option
+                value='best-selling'
+                {% if sort == 'best-selling' %}
+                  selected
+                {% endif %}
+              >
+                Best selling
+              </option>
+            </select>
+          </label>
+        </form>
+      </div>
+
+      {%- if collection.products.size > 0 -%}
+        <div class='collection-{{ section.id }}__grid'>
+          {%- for product in collection.products -%}
+            {% render 'product-card', product: product %}
+          {%- endfor -%}
+        </div>
+
+        {%- if paginate.pages > 1 -%}
+          <nav class='collection-{{ section.id }}__pagination' aria-label='Pagination'>
+            {%- for part in paginate.parts -%}
+              {%- if part.is_link -%}
+                <a href='{{ part.url }}'>{{ part.title }}</a>
+              {%- else -%}
+                <span class='{% if part.title == paginate.current_page %}is-current{% endif %}'>{{ part.title }}</span>
+              {%- endif -%}
+            {%- endfor -%}
+          </nav>
+        {%- endif -%}
+      {%- else -%}
+        <p class='collection-{{ section.id }}__empty'>{{ 'products.facets.no_products' | t }}</p>
+      {%- endif -%}
+    {%- endpaginate -%}
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Collection", "settings": [] }
+{% endschema %}
